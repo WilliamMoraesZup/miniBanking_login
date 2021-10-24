@@ -6,23 +6,41 @@
 //
 
 import Foundation
+import miniBanking_networking
 
 protocol LoginHomeBusinessHandlerProtocol: AnyObject {
 
-    func login() -> Bool
+    func login(
+        username: String,
+        password: String
+    )
     
 }
 
 final class LoginHomeViewModel: LoginHomeBusinessHandlerProtocol {
     
     private weak var displayer: LoginHomeDisplayerProtocol?
+    private let service: LoginServiceProtocol
     
-    func setup(displayer: LoginHomeDisplayerProtocol) {
+    init(
+        displayer: LoginHomeDisplayerProtocol,
+        service: LoginServiceProtocol
+    ) {
         self.displayer = displayer
+        self.service = service
     }
     
-    func login() -> Bool {
-        return true
+    func login(
+        username: String,
+        password: String
+    ) {
+        service.login(
+            username: username,
+            password: password,
+            completion: { [weak self] didSucceed in
+                self?.displayer?.displayLogin(didSucceed: didSucceed)
+            }
+        )
     }
     
 }

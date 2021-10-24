@@ -15,8 +15,11 @@ public final class LoginModule {
             bundle: Bundle.init(for: self)
         )
         guard let initialViewController = storyboard.instantiateInitialViewController() as? LoginHomeViewController else { exit(0) }
-        let businessHandler = LoginHomeViewModel()
-        businessHandler.setup(displayer: initialViewController)
+        let loginService = LoginService()
+        let businessHandler = LoginHomeViewModel(
+            displayer: initialViewController,
+            service: loginService
+        )
         initialViewController.setup(businessHandler: businessHandler)
         navigationController.pushViewController(
             initialViewController,
